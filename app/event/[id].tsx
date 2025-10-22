@@ -11,13 +11,15 @@ import { useLocalSearchParams } from "expo-router";
 import { fetchEventDetails } from "@/Store/eventDetailsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/Store/Store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-
+import useFave from "@/hooks/use-add-toFav";
+import ToastManager, { Toast } from "toastify-react-native";
 export default function EventDetails() {
   const { id } = useLocalSearchParams();
   const dispatch = useDispatch<AppDispatch>();
-
+  const { toggleFave } = useFave();
+  const [res,setRes] = useState<boolean>(false)
   const { event, loading, error } = useSelector(
     (state: RootState) => state.eventDetails
   );
@@ -52,7 +54,18 @@ export default function EventDetails() {
       </View>
     );
   }
+  const book = (event:object) => {
+    if (event) {
+      toggleFave(event);
+      setRes(true);
+      Toast.success(`The event has been successfully booked ${event?.title}`);
+      const timer =  setTimeout(() => {
+        setRes(false);
+      }, 1000);
 
+      return () => clearTimeout(timer);
+    }
+  };
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -134,21 +147,31 @@ export default function EventDetails() {
           </View>
         </View>
       </ScrollView>
+
       <View style={styles.buttonContainer}>
         <Pressable
           style={({ pressed }) => [
             styles.bookButton,
             pressed && { opacity: 0.8 },
+            res && { backgroundColor: "#10B981" },
           ]}
-          onPress={() => alert("Booking confirmed! 🎟️")}
+          onPress={() => book(event)}
         >
-          <Ionicons
-            name="ticket-outline"
-            size={20}
-            color="#fff"
-            style={{ marginRight: 8 }}
-          />
-          <Text style={styles.buttonText}>Book Now</Text>
+          {res ? (
+            <ActivityIndicator
+              size="small"
+              color="#fff"
+              style={{ marginRight: 8 }}
+            />
+          ) : (
+            <Ionicons
+              name="ticket-outline"
+              size={20}
+              color="#fff"
+              style={{ marginRight: 8 }}
+            />
+          )}
+          <Text style={styles.buttonText}>{res ? "Booked!" : "Book Now"}</Text>
         </Pressable>
       </View>
     </View>
@@ -159,7 +182,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F9FAFB",
     paddingBottom: 100,
-    flex:1
+    flex: 1,
   },
   center: {
     flex: 1,
@@ -244,15 +267,16 @@ const styles = StyleSheet.create({
   },
   bookButton: {
     backgroundColor: "#3B82F6",
-    paddingVertical: 14,
-    borderRadius: 12,
+    paddingVertical: 16,
+    borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
   },
   buttonText: {
     color: "#fff",
