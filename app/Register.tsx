@@ -5,10 +5,14 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 export default function Register() {
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      bottomOffset={62}
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={styles.container}
+    >
       <Text style={styles.title}>Create Account</Text>
       <Text style={styles.subtitle}>Sign up to get started</Text>
 
@@ -32,7 +36,7 @@ export default function Register() {
       <Text style={styles.footerText}>
         Already have an account? <Text style={styles.link}>Login</Text>
       </Text>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
