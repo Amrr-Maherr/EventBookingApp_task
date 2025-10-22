@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import {
   View,
   Text,
@@ -5,38 +6,51 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { KeyboardAwareScrollView, KeyboardToolbar } from "react-native-keyboard-controller";
 export default function Register() {
+  const router = useRouter();
   return (
-    <KeyboardAwareScrollView
-      bottomOffset={62}
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={styles.container}
-    >
-      <Text style={styles.title}>Create Account</Text>
-      <Text style={styles.subtitle}>Sign up to get started</Text>
+    <>
+      <KeyboardAwareScrollView
+        bottomOffset={62}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.container}
+      >
+        <Text style={styles.title}>Create Account</Text>
+        <Text style={styles.subtitle}>Sign up to get started</Text>
 
-      <TextInput style={styles.input} placeholder="Full Name" />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-      />
-      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        secureTextEntry
-      />
+        <TextInput style={styles.input} placeholder="Full Name" />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm Password"
+          secureTextEntry
+        />
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Register</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Register</Text>
+        </TouchableOpacity>
 
-      <Text style={styles.footerText}>
-        Already have an account? <Text style={styles.link}>Login</Text>
-      </Text>
-    </KeyboardAwareScrollView>
+        <Text
+          style={styles.footerText}
+          onPress={() => {
+            router.push("/Login");
+          }}
+        >
+          Already have an account? <Text style={styles.link}>Login</Text>
+        </Text>
+      </KeyboardAwareScrollView>
+      <KeyboardToolbar />
+    </>
   );
 }
 

@@ -8,43 +8,47 @@ import {
 } from "react-native";
 import {
   KeyboardAwareScrollView,
+  KeyboardToolbar,
 } from "react-native-keyboard-controller";
 export default function Login() {
     const router = useRouter();
   return (
     <>
-      <KeyboardAwareScrollView
-        bottomOffset={62}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.container}
-      >
-        <Text style={styles.title}>Welcome Back!</Text>
-        <Text style={styles.subtitle}>Please login to continue</Text>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          keyboardType="email-address"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-        />
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-
-        <Text
-          style={styles.footerText}
-          onPress={() => {
-            router.push("/Register");
-          }}
+      <>
+        <KeyboardAwareScrollView
+          bottomOffset={62}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.container}
         >
-          Don't have an account? <Text style={styles.link}>Register</Text>
-        </Text>
-      </KeyboardAwareScrollView>
+          <Text style={styles.title}>Welcome Back!</Text>
+          <Text style={styles.subtitle}>Please login to continue</Text>
+
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            keyboardType="email-address"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+          />
+
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+
+          <Text
+            style={styles.footerText}
+            onPress={() => {
+              router.push("/Register");
+            }}
+          >
+            Don't have an account? <Text style={styles.link}>Register</Text>
+          </Text>
+        </KeyboardAwareScrollView>
+        <KeyboardToolbar />
+      </>
     </>
   );
 }
