@@ -20,7 +20,7 @@ const eventsSlice = createSlice({
   name: "events",
   initialState: {
     events: [] as any[],
-    loading: false,
+    loading: true,
     error: null as string | null,
   },
   reducers: {},
