@@ -26,7 +26,16 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="home" size={28} color={color} />
+            <Ionicons name="home-outline" size={28} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="History"
+        options={{
+          title: "History",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="time-outline" size={28} color={color} />
           ),
         }}
       />
@@ -35,7 +44,7 @@ export default function TabLayout() {
         options={{
           title: "Profile",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="person" size={28} color={color} />
+            <Ionicons name="person-outline" size={28} color={color} />
           ),
         }}
       />
