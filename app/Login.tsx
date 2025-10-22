@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import {
   View,
   Text,
@@ -9,6 +10,7 @@ import {
   KeyboardAwareScrollView,
 } from "react-native-keyboard-controller";
 export default function Login() {
+    const router = useRouter();
   return (
     <>
       <KeyboardAwareScrollView
@@ -34,7 +36,12 @@ export default function Login() {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 
-        <Text style={styles.footerText}>
+        <Text
+          style={styles.footerText}
+          onPress={() => {
+            router.push("/Register");
+          }}
+        >
           Don't have an account? <Text style={styles.link}>Register</Text>
         </Text>
       </KeyboardAwareScrollView>
