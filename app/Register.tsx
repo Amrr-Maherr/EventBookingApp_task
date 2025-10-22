@@ -11,6 +11,7 @@ import {
   KeyboardAwareScrollView,
   KeyboardToolbar,
 } from "react-native-keyboard-controller";
+import axios from "axios";
 
 export default function Register() {
   const router = useRouter();
@@ -22,12 +23,30 @@ export default function Register() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data:object) => {
-    console.log(data);
-    router.push("/Login");
-  };
-
   const password = watch("password");
+
+  const onSubmit = async (data: any) => {
+    try {
+      const response = await axios.post(
+        "https://reqres.in/api/register",
+        {
+          email: data.email,
+          password: data.password,
+        },
+        {
+          headers: {
+            "x-api-key": "reqres-free-v1",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
+      router.push("/Login");
+    } catch (error: any) {
+      console.log(error.response?.data || error.message);
+      alert(error.response?.data?.error || "Registration failed");
+    }
+  };
 
   return (
     <>
@@ -39,6 +58,13 @@ export default function Register() {
         <Text style={styles.title}>Create Account</Text>
         <Text style={styles.subtitle}>Sign up to get started</Text>
 
+        {/* Test Credentials Box */}
+        <View style={styles.infoBox}>
+          <Text style={styles.infoText}>Test credentials:</Text>
+          <Text style={styles.code}>Email: eve.holt@reqres.in</Text>
+          <Text style={styles.code}>Password: pistol</Text>
+        </View>
+
         <Controller
           control={control}
           name="fullName"
@@ -46,7 +72,7 @@ export default function Register() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styles.input}
-              placeholder="Full Name"
+              placeholder="John Doe"
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
@@ -67,7 +93,7 @@ export default function Register() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styles.input}
-              placeholder="Email"
+              placeholder="eve.holt@reqres.in"
               keyboardType="email-address"
               onBlur={onBlur}
               onChangeText={onChange}
@@ -92,7 +118,7 @@ export default function Register() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styles.input}
-              placeholder="Password"
+              placeholder="pistol"
               secureTextEntry
               onBlur={onBlur}
               onChangeText={onChange}
@@ -114,7 +140,7 @@ export default function Register() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styles.input}
-              placeholder="Confirm Password"
+              placeholder="pistol"
               secureTextEntry
               onBlur={onBlur}
               onChangeText={onChange}
@@ -158,7 +184,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     color: "#666",
-    marginBottom: 30,
+    marginBottom: 16,
     textAlign: "center",
   },
   input: {
@@ -184,4 +210,22 @@ const styles = StyleSheet.create({
   footerText: { textAlign: "center", color: "#666" },
   link: { color: "#4f46e5", fontWeight: "bold" },
   error: { color: "red", marginBottom: 10, fontSize: 13 },
+
+  infoBox: {
+    backgroundColor: "#eef2ff",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#c7d2fe",
+  },
+  infoText: { fontWeight: "600", color: "#1e3a8a", marginBottom: 4 },
+  code: {
+    fontFamily: "monospace",
+    backgroundColor: "#fff",
+    padding: 6,
+    borderRadius: 6,
+    marginBottom: 4,
+    color: "#1e3a8a",
+  },
 });
