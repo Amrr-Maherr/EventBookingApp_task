@@ -38,7 +38,7 @@ export default function Login() {
         }
       );
       console.log(response.data);
-      router.push("/Home");
+      router.replace("/Home");
     } catch (error: any) {
       console.log(error.response?.data || error.message);
       alert(error.response?.data?.error || "Login failed");
