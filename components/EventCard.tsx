@@ -17,7 +17,6 @@ interface EventCardProps {
 
 export default function EventCard({ event }: EventCardProps) {
   const router = useRouter();
-  console.log(event);
   return (
     <Pressable onPress={() => router.push(`/event/${event.id}`)}>
       <View style={styles.card}>

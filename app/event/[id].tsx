@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { fetchEventDetails } from "@/Store/eventDetailsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/Store/Store";
@@ -18,6 +18,7 @@ import { toggleFave, Event } from "@/Store/FavSlice";
 
 export default function EventDetails() {
   const { id } = useLocalSearchParams();
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [res, setRes] = useState<boolean>(false);
 
@@ -67,7 +68,13 @@ export default function EventDetails() {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Image source={{ uri: event.image }} style={styles.image} />
+        <View style={styles.headerImageContainer}>
+          <Image source={{ uri: event.image }} style={styles.image} />
+          <Pressable style={styles.backButton} onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </Pressable>
+        </View>
+
         <View style={styles.content}>
           <Text style={styles.title}>{event.title}</Text>
 
@@ -177,6 +184,21 @@ export default function EventDetails() {
 
 const styles = StyleSheet.create({
   container: { backgroundColor: "#F9FAFB", paddingBottom: 100, flex: 1 },
+  headerImageContainer: { position: "relative" },
+  backButton: {
+    position: "absolute",
+    top: 40,
+    left: 15,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: 8,
+    borderRadius: 50,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 5,
+    zIndex:1000
+  },
   center: {
     flex: 1,
     justifyContent: "center",
