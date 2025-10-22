@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Async thunk to fetch event details by ID
 export const fetchEventDetails = createAsyncThunk(
   "eventDetails/fetchEventDetails",
-  async (id: string) => {
+  async (id) => {
     try {
       const response = await axios.get(
         `https://68f8b804deff18f212b739d5.mockapi.io/api/v1/events/${id}`
@@ -23,8 +22,7 @@ const eventDetailsSlice = createSlice({
     loading: false,
     error: null as string | null,
   },
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchEventDetails.pending, (state) => {

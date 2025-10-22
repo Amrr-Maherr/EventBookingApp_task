@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/Store/Store";
 import { useEffect } from "react";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import EventLocationInfo from "./EventLocationInfo";
 
 export default function EventDetails() {
   const { id } = useLocalSearchParams();
@@ -61,20 +62,7 @@ export default function EventDetails() {
         <View style={styles.content}>
           <Text style={styles.title}>{event.title}</Text>
 
-          <View style={styles.metaRow}>
-            <Ionicons name="calendar-outline" size={18} color="#6B7280" />
-            <Text style={styles.meta}>
-              {new Date(event.date).toLocaleDateString("en-US")}
-            </Text>
-
-            <Ionicons
-              name="location-outline"
-              size={18}
-              color="#6B7280"
-              style={{ marginLeft: 10 }}
-            />
-            <Text style={styles.meta}>{event.location}</Text>
-          </View>
+          <EventLocationInfo date={event.date} location={event.location} />
 
           <Text style={styles.description}>{event.description}</Text>
 
@@ -134,6 +122,7 @@ export default function EventDetails() {
           </View>
         </View>
       </ScrollView>
+
       <View style={styles.buttonContainer}>
         <Pressable
           style={({ pressed }) => [
@@ -159,7 +148,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F9FAFB",
     paddingBottom: 100,
-    flex:1
   },
   center: {
     flex: 1,
@@ -193,16 +181,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#111827",
     marginBottom: 8,
-  },
-  metaRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  meta: {
-    fontSize: 14,
-    color: "#6B7280",
-    marginLeft: 4,
   },
   description: {
     fontSize: 16,

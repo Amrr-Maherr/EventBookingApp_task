@@ -11,51 +11,6 @@ import { useEffect } from "react";
 import { fetchEvents } from "@/Store/EventsSlice";
 import EventCard from "@/components/EventCard";
 import CardLoader from "@/components/CardLoder";
-const dummyEvents = [
-  {
-    id: "1",
-    title: "React Native Workshop",
-    date: "2025-11-01",
-    location: "Cairo, Egypt",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: "2",
-    title: "Expo Router Meetup",
-    date: "2025-11-05",
-    location: "Alexandria, Egypt",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: "3",
-    title: "JavaScript Conference",
-    date: "2025-11-10",
-    location: "Giza, Egypt",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: "1",
-    title: "React Native Workshop",
-    date: "2025-11-01",
-    location: "Cairo, Egypt",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: "2",
-    title: "Expo Router Meetup",
-    date: "2025-11-05",
-    location: "Alexandria, Egypt",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    id: "3",
-    title: "JavaScript Conference",
-    date: "2025-11-10",
-    location: "Giza, Egypt",
-    image: "https://via.placeholder.com/150",
-  },
-];
-
 export default function Home() {
     const dispatch = useDispatch<AppDispatch>();
     const data = useSelector((state: RootState) => state.events.events);
