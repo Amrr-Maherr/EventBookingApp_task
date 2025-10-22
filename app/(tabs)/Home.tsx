@@ -80,11 +80,12 @@ export default function Home() {
       <FlatList
         data={data}
         keyExtractor={(item) => item.id || item.title}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 20 }}
-              renderItem={({ item }) => (
-            // event card
-            loading ? <CardLoader /> :<EventCard event={item} />
-        )}
+        renderItem={({ item }) =>
+          // event card
+          loading ? <CardLoader /> : <EventCard event={item} />
+        }
       />
     </View>
   );
