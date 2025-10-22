@@ -1,44 +1,82 @@
-import { View, Text, FlatList, StyleSheet, Image } from "react-native";
-
-const events = [
-  {
-    id: "1",
-    title: "React Native Workshop",
-    date: "2025-11-01",
-    location: "Cairo, Egypt",
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-  },
-  {
-    id: "2",
-    title: "Expo Router Meetup",
-    date: "2025-11-05",
-    location: "Alexandria, Egypt",
-    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df",
-  },
-  {
-    id: "3",
-    title: "JavaScript Conference",
-    date: "2025-11-10",
-    location: "Giza, Egypt",
-    image: "https://images.unsplash.com/photo-1531058020387-3be344556be6",
-  },
-];
+import useFave from "@/hooks/use-add-toFav";
+import { useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
+  Pressable,
+  Alert,
+} from "react-native";
 
 export default function History() {
+  const {
+    favorites: events,
+    loadFavorites,
+    toggleFave,
+    clearFavorites,
+  } = useFave();
+
+  useEffect(() => {
+    loadFavorites();
+  }, [loadFavorites]);
+
+  const handleClearAll = () => {
+    Alert.alert("Confirm", "Are you sure you want to remove all favorites?", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Yes", onPress: () => clearFavorites()  },
+    ]);
+    loadFavorites();
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>My Events</Text>
+
+      {/* زر مسح كل الحجز */}
+      {events.length > 0 && (
+        <Pressable style={styles.clearButton} onPress={handleClearAll}>
+          <Text style={styles.clearButtonText}>Remove All Favorites</Text>
+        </Pressable>
+      )}
+
       <FlatList
         data={events}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+            <Image
+              source={{ uri: item.image || "https://via.placeholder.com/120" }}
+              style={styles.image}
+            />
             <View style={styles.info}>
               <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.date}>{item.date}</Text>
+              <Text style={styles.date}>
+                {item.date
+                  ? new Date(item.date).toLocaleDateString()
+                  : "No Date"}
+              </Text>
               <Text style={styles.location}>{item.location}</Text>
+              <Text style={styles.description}>{item.description}</Text>
+              <Text style={styles.speakers}>
+                Speakers: {item.speakers?.join(", ") || "TBA"}
+              </Text>
+              <Text style={styles.price}>Price: ${item.price ?? "Free"}</Text>
+              <Text style={styles.spots}>
+                Available Spots: {item.availableSpots ?? "N/A"}
+              </Text>
+
+              {/* زر إزالة من المفضلة لكل كارد */}
+              <Pressable
+                style={styles.removeButton}
+                onPress={() => toggleFave(item)}
+              >
+                <Text style={styles.removeButtonText}>
+                  Remove from Favorites
+                </Text>
+              </Pressable>
             </View>
           </View>
         )}
@@ -57,14 +95,24 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 26,
     fontWeight: "700",
-    marginBottom: 20,
+    marginBottom: 10,
     color: "#1f2937",
   },
+  clearButton: {
+    backgroundColor: "#dc2626",
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  clearButtonText: {
+    color: "#fff",
+    fontWeight: "700",
+  },
   card: {
-    flexDirection: "row",
     backgroundColor: "#fff",
     borderRadius: 15,
-    marginBottom: 15,
+    marginBottom: 20,
     overflow: "hidden",
     elevation: 5,
     shadowColor: "#000",
@@ -73,17 +121,15 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: "100%",
+    height: 180,
   },
   info: {
-    flex: 1,
     padding: 15,
-    justifyContent: "center",
   },
   title: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 20,
+    fontWeight: "700",
     color: "#111827",
     marginBottom: 5,
   },
@@ -95,5 +141,37 @@ const styles = StyleSheet.create({
   location: {
     fontSize: 14,
     color: "#6b7280",
+    marginBottom: 5,
+  },
+  description: {
+    fontSize: 14,
+    color: "#374151",
+    marginBottom: 5,
+  },
+  speakers: {
+    fontSize: 14,
+    color: "#6b7280",
+    marginBottom: 3,
+  },
+  price: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#111827",
+    marginBottom: 3,
+  },
+  spots: {
+    fontSize: 14,
+    color: "#6b7280",
+    marginBottom: 10,
+  },
+  removeButton: {
+    backgroundColor: "#ef4444",
+    paddingVertical: 8,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  removeButtonText: {
+    color: "#fff",
+    fontWeight: "600",
   },
 });
