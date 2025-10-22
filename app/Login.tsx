@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router";
+import { useForm, Controller } from "react-hook-form";
 import {
   View,
   Text,
@@ -10,50 +11,96 @@ import {
   KeyboardAwareScrollView,
   KeyboardToolbar,
 } from "react-native-keyboard-controller";
+
 export default function Login() {
-    const router = useRouter();
+  const router = useRouter();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    router.push("/Home");
+  };
+
   return (
     <>
-      <>
-        <KeyboardAwareScrollView
-          bottomOffset={62}
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.container}
-        >
-          <Text style={styles.title}>Welcome Back!</Text>
-          <Text style={styles.subtitle}>Please login to continue</Text>
+      <KeyboardAwareScrollView
+        bottomOffset={62}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.container}
+      >
+        <Text style={styles.title}>Welcome Back!</Text>
+        <Text style={styles.subtitle}>Please login to continue</Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            keyboardType="email-address"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-          />
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              router.push("/Home");
-            }}
-          >
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-
-          <Text
-            style={styles.footerText}
-            onPress={() => {
-              router.push("/Register");
-            }}
-          >
-            Don't have an account? <Text style={styles.link}>Register</Text>
+        <Controller
+          control={control}
+          name="email"
+          rules={{
+            required: "Email is required",
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: "Enter a valid email",
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              keyboardType="email-address"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+        />
+        {errors.email && (
+          <Text style={{ color: "red", marginBottom: 10 }}>
+            {errors.email.message}
           </Text>
-        </KeyboardAwareScrollView>
-        <KeyboardToolbar />
-      </>
+        )}
+
+        <Controller
+          control={control}
+          name="password"
+          rules={{ required: "Password is required" }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
+        />
+        {errors.password && (
+          <Text style={{ color: "red", marginBottom: 10 }}>
+            {errors.password.message}
+          </Text>
+        )}
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleSubmit(onSubmit)}
+        >
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+
+        <Text
+          style={styles.footerText}
+          onPress={() => {
+            router.push("/Register");
+          }}
+        >
+          Don't have an account? <Text style={styles.link}>Register</Text>
+        </Text>
+      </KeyboardAwareScrollView>
+      <KeyboardToolbar />
     </>
   );
 }
@@ -97,12 +144,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
-  footerText: {
-    textAlign: "center",
-    color: "#666",
-  },
-  link: {
-    color: "#4f46e5",
-    fontWeight: "bold",
-  },
+  footerText: { textAlign: "center", color: "#666" },
+  link: { color: "#4f46e5", fontWeight: "bold" },
 });
