@@ -1,4 +1,3 @@
-import useFave from "@/hooks/use-add-toFav";
 import { useEffect } from "react";
 import {
   View,
@@ -9,38 +8,38 @@ import {
   Pressable,
   Alert,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loadFavorites,
+  toggleFave,
+  clearFavorites,
+  Event,
+} from "@/Store/FavSlice";
+import { RootState } from "@/Store/Store";
 
 export default function History() {
-  const {
-    favorites: events,
-    loadFavorites,
-    toggleFave,
-    clearFavorites,
-  } = useFave();
+  const dispatch = useDispatch();
+  const events = useSelector((state: RootState) => state.favorites.favorites);
 
   useEffect(() => {
-    loadFavorites();
-  }, [loadFavorites]);
+    dispatch(loadFavorites());
+  }, [dispatch]);
 
   const handleClearAll = () => {
     Alert.alert("Confirm", "Are you sure you want to remove all favorites?", [
       { text: "Cancel", style: "cancel" },
-      { text: "Yes", onPress: () => clearFavorites()  },
+      { text: "Yes", onPress: () => dispatch(clearFavorites()) },
     ]);
-    loadFavorites();
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>My Events</Text>
-
-      {/* زر مسح كل الحجز */}
       {events.length > 0 && (
         <Pressable style={styles.clearButton} onPress={handleClearAll}>
           <Text style={styles.clearButtonText}>Remove All Favorites</Text>
         </Pressable>
       )}
-
       <FlatList
         data={events}
         keyExtractor={(item) => item.id}
@@ -59,7 +58,6 @@ export default function History() {
                   : "No Date"}
               </Text>
               <Text style={styles.location}>{item.location}</Text>
-              <Text style={styles.description}>{item.description}</Text>
               <Text style={styles.speakers}>
                 Speakers: {item.speakers?.join(", ") || "TBA"}
               </Text>
@@ -67,11 +65,9 @@ export default function History() {
               <Text style={styles.spots}>
                 Available Spots: {item.availableSpots ?? "N/A"}
               </Text>
-
-              {/* زر إزالة من المفضلة لكل كارد */}
               <Pressable
                 style={styles.removeButton}
-                onPress={() => toggleFave(item)}
+                onPress={() => dispatch(toggleFave(item))}
               >
                 <Text style={styles.removeButtonText}>
                   Remove from Favorites
@@ -105,10 +101,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 15,
   },
-  clearButtonText: {
-    color: "#fff",
-    fontWeight: "700",
-  },
+  clearButtonText: { color: "#fff", fontWeight: "700" },
   card: {
     backgroundColor: "#fff",
     borderRadius: 15,
@@ -120,58 +113,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 6,
   },
-  image: {
-    width: "100%",
-    height: 180,
-  },
-  info: {
-    padding: 15,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#111827",
-    marginBottom: 5,
-  },
-  date: {
-    fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 3,
-  },
-  location: {
-    fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 5,
-  },
-  description: {
-    fontSize: 14,
-    color: "#374151",
-    marginBottom: 5,
-  },
-  speakers: {
-    fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 3,
-  },
-  price: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#111827",
-    marginBottom: 3,
-  },
-  spots: {
-    fontSize: 14,
-    color: "#6b7280",
-    marginBottom: 10,
-  },
+  image: { width: "100%", height: 180 },
+  info: { padding: 15 },
+  title: { fontSize: 20, fontWeight: "700", color: "#111827", marginBottom: 5 },
+  date: { fontSize: 14, color: "#6b7280", marginBottom: 3 },
+  location: { fontSize: 14, color: "#6b7280", marginBottom: 5 },
+  speakers: { fontSize: 14, color: "#6b7280", marginBottom: 3 },
+  price: { fontSize: 14, fontWeight: "600", color: "#111827", marginBottom: 3 },
+  spots: { fontSize: 14, color: "#6b7280", marginBottom: 10 },
   removeButton: {
     backgroundColor: "#ef4444",
     paddingVertical: 8,
     borderRadius: 8,
     alignItems: "center",
   },
-  removeButtonText: {
-    color: "#fff",
-    fontWeight: "600",
-  },
+  removeButtonText: { color: "#fff", fontWeight: "600" },
 });

@@ -13,13 +13,14 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/Store/Store";
 import { useEffect, useState } from "react";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import useFave from "@/hooks/use-add-toFav";
 import ToastManager, { Toast } from "toastify-react-native";
+import { toggleFave, Event } from "@/Store/FavSlice";
+
 export default function EventDetails() {
   const { id } = useLocalSearchParams();
   const dispatch = useDispatch<AppDispatch>();
-  const { toggleFave } = useFave();
-  const [res,setRes] = useState<boolean>(false)
+  const [res, setRes] = useState<boolean>(false);
+
   const { event, loading, error } = useSelector(
     (state: RootState) => state.eventDetails
   );
@@ -54,23 +55,19 @@ export default function EventDetails() {
       </View>
     );
   }
-  const book = (event:object) => {
-    if (event) {
-      toggleFave(event);
-      setRes(true);
-      Toast.success(`The event has been successfully booked ${event?.title}`);
-      const timer =  setTimeout(() => {
-        setRes(false);
-      }, 1000);
 
-      return () => clearTimeout(timer);
-    }
+  const book = (event: Event) => {
+    dispatch(toggleFave(event));
+    setRes(true);
+    Toast.success(`The event has been successfully booked ${event.title}`);
+    const timer = setTimeout(() => setRes(false), 1000);
+    return () => clearTimeout(timer);
   };
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
         <Image source={{ uri: event.image }} style={styles.image} />
-
         <View style={styles.content}>
           <Text style={styles.title}>{event.title}</Text>
 
@@ -179,82 +176,42 @@ export default function EventDetails() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#F9FAFB",
-    paddingBottom: 100,
-    flex: 1,
-  },
+  container: { backgroundColor: "#F9FAFB", paddingBottom: 100, flex: 1 },
   center: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F9FAFB",
   },
-  loadingText: {
-    marginTop: 10,
-    color: "#6B7280",
-  },
-  errorText: {
-    color: "red",
-    fontSize: 16,
-  },
-  emptyText: {
-    color: "#6B7280",
-    fontSize: 16,
-  },
+  loadingText: { marginTop: 10, color: "#6B7280" },
+  errorText: { color: "red", fontSize: 16 },
+  emptyText: { color: "#6B7280", fontSize: 16 },
   image: {
     width: "100%",
     height: 240,
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
-  content: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#111827",
-    marginBottom: 8,
-  },
-  metaRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  meta: {
-    fontSize: 14,
-    color: "#6B7280",
-    marginLeft: 4,
-  },
+  content: { padding: 20 },
+  title: { fontSize: 24, fontWeight: "700", color: "#111827", marginBottom: 8 },
+  metaRow: { flexDirection: "row", alignItems: "center", marginBottom: 15 },
+  meta: { fontSize: 14, color: "#6B7280", marginLeft: 4 },
   description: {
     fontSize: 16,
     lineHeight: 22,
     color: "#374151",
     marginBottom: 20,
   },
-  section: {
-    marginBottom: 15,
-  },
+  section: { marginBottom: 15 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "600",
     color: "#1F2937",
     marginBottom: 5,
   },
-  iconRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 3,
-  },
-  speaker: {
-    fontSize: 15,
-    color: "#4B5563",
-  },
-  info: {
-    fontSize: 15,
-    color: "#4B5563",
-  },
+  iconRow: { flexDirection: "row", alignItems: "center", marginVertical: 3 },
+  speaker: { fontSize: 15, color: "#4B5563" },
+  info: { fontSize: 15, color: "#4B5563" },
   buttonContainer: {
     position: "absolute",
     bottom: 0,
@@ -278,9 +235,5 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     elevation: 4,
   },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "600",
-  },
+  buttonText: { color: "#fff", fontSize: 18, fontWeight: "600" },
 });
