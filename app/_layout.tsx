@@ -17,7 +17,7 @@ export default function RootLayout() {
     // app providers index !
     <Index>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }} initialRouteName="(tabs)">
+        <Stack screenOptions={{ headerShown: false }} initialRouteName="Login">
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="Login" />
           <Stack.Screen name="Register" />

@@ -5,28 +5,40 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-
+import {
+  KeyboardAwareScrollView,
+} from "react-native-keyboard-controller";
 export default function Login() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome Back!</Text>
-      <Text style={styles.subtitle}>Please login to continue</Text>
+    <>
+      <KeyboardAwareScrollView
+        bottomOffset={62}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.container}
+      >
+        <Text style={styles.title}>Welcome Back!</Text>
+        <Text style={styles.subtitle}>Please login to continue</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-      />
-      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+        />
 
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
 
-      <Text style={styles.footerText}>
-        Don't have an account? <Text style={styles.link}>Register</Text>
-      </Text>
-    </View>
+        <Text style={styles.footerText}>
+          Don't have an account? <Text style={styles.link}>Register</Text>
+        </Text>
+      </KeyboardAwareScrollView>
+    </>
   );
 }
 
