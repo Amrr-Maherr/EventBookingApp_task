@@ -1,50 +1,147 @@
-# Welcome to your Expo app 👋
+# 📱 EventBookingApp
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**EventBookingApp** is a mobile application built with **React Native (Expo)** that allows users to **browse, register, and manage events** easily.  
+It features user authentication with **Firebase**, smooth navigation using **Expo Router**, and global state management powered by **Redux Toolkit**.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Features
 
+- 🔐 **Firebase Authentication** (Register, Login, Logout)  
+- 🗂️ **Redux Toolkit** for state management (events, favorites, details)  
+- 🧭 **Expo Router** for seamless navigation  
+- 💾 **AsyncStorage** to persist user data locally  
+- 📱 **Responsive UI** built with modern React Native components  
+- 🎟️ **Event Details & History** screens  
+- ❤️ **Add to Favorites** functionality  
+- 🧭 **Profile Screen** with Firebase Logout integration  
+
+---
+
+## 🏗️ Backend & Data
+
+- **Events data** are fetched from [MockAPI](https://mockapi.io/) using the endpoint:  
+  `https://68f8b804deff18f212b739d5.mockapi.io/api/v1/events`  
+- **Firebase Authentication** is used for user registration and login because MockAPI's free plan does not support full authentication endpoints.
+
+---
+
+## 🏗️ Project Structure
+
+```
+📁 EventBookingApp
+├── 📁 Providers            # App-wide context providers
+├── 📁 Store                # Redux slices and store setup
+├── 📁 app                  # Screens & navigation structure (Expo Router)
+│   ├── (tabs)              # Tab screens: Home, History, Profile
+│   ├── event/[id].tsx      # Dynamic route for event details
+│   ├── Login.tsx           # Firebase login screen
+│   ├── Register.tsx        # Firebase register screen
+│   └── modal.tsx
+├── 📁 assets               # App images and icons
+├── 📁 components           # Reusable UI components (cards, loaders, etc.)
+├── 📁 constants            # Theme and app constants
+├── 📁 hooks                # Custom React hooks
+├── 📁 scripts              # Utility scripts (e.g., reset project)
+├── ⚙️ firebaseConfig.js    # Firebase app configuration
+├── ⚙️ app.json
+├── ⚙️ package.json
+├── ⚙️ tsconfig.json
+└── 📝 README.md
+```
+
+---
+
+## 🧩 Tech Stack
+
+| Category | Technology |
+|-----------|-------------|
+| Framework | **React Native (Expo)** |
+| Navigation | **Expo Router** |
+| State Management | **Redux Toolkit** |
+| Backend | **MockAPI** (events) + **Firebase Authentication** |
+| Storage | **AsyncStorage** |
+| UI | **React Native + Vector Icons** |
+| Language | **TypeScript** |
+
+---
+
+## 🔧 Installation & Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/EventBookingApp.git
+   cd EventBookingApp
+   ```
+
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. **Run the app**
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. **Run on Android emulator**
+   ```bash
+   npm run android
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🔥 Firebase Setup
 
-## Get a fresh project
+1. Go to [Firebase Console](https://console.firebase.google.com/)  
+2. Create a new project and enable **Email/Password Authentication**  
+3. Copy your Firebase config and paste it inside:
+   ```js
+   // firebaseConfig.js
+   import { initializeApp } from "firebase/app";
+   import { getAuth } from "firebase/auth";
 
-When you're ready, run:
+   const firebaseConfig = {
+     apiKey: "YOUR_API_KEY",
+     authDomain: "YOUR_AUTH_DOMAIN",
+     projectId: "YOUR_PROJECT_ID",
+     storageBucket: "YOUR_STORAGE_BUCKET",
+     messagingSenderId: "YOUR_SENDER_ID",
+     appId: "YOUR_APP_ID",
+   };
 
-```bash
-npm run reset-project
-```
+   const app = initializeApp(firebaseConfig);
+   export const auth = getAuth(app);
+   ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🧠 Redux Store Overview
 
-To learn more about developing your project with Expo, look at the following resources:
+| Slice | Responsibility |
+|--------|----------------|
+| **EventsSlice.tsx** | Handles fetching and storing all events from MockAPI endpoint |
+| **FavSlice.tsx** | Manages favorite events |
+| **eventDetailsSlice.tsx** | Stores detailed event info |
+| **Store.tsx** | Central Redux store setup |
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## 🧑‍💻 Author
 
-Join our community of developers creating universal apps.
+**👤 Amr Maher Ali**  
+Frontend Developer specializing in **React, React Native, and Next.js**
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+📧 **Email:** [amrr.maherr24@gmail.com](mailto:amrr.maherr24@gmail.com)  
+🔗 **LinkedIn:** [linkedin.com/in/Amrr-Maherr](https://www.linkedin.com/in/Amrr-Maherr)  
+🌐 **Portfolio:** [amrr-maherr.github.io](https://amrr-maherr.github.io)
+
+---
+
+## 🏁 License
+This project is licensed under the **MIT License** – free to use and modify.
+
+---
+
+> 📅 *Generated on October 23, 2025*  
+> ⚙️ *Expo + Firebase + Redux + MockAPI Integration by Amr Maher*
