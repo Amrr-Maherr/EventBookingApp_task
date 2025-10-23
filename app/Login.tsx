@@ -6,12 +6,14 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import {
   KeyboardAwareScrollView,
   KeyboardToolbar,
 } from "react-native-keyboard-controller";
-import axios from "axios";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
 
 export default function Login() {
   const router = useRouter();
@@ -24,24 +26,17 @@ export default function Login() {
 
   const onSubmit = async (data: any) => {
     try {
-      const response = await axios.post(
-        "https://reqres.in/api/login",
-        {
-          email: data.email,
-          password: data.password,
-        },
-        {
-          headers: {
-            "x-api-key": "reqres-free-v1",
-            "Content-Type": "application/json",
-          },
-        }
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
       );
-      console.log(response.data);
+
+      console.log("User logged in:", userCredential.user.email);
       router.replace("/Home");
     } catch (error: any) {
-      console.log(error.response?.data || error.message);
-      alert(error.response?.data?.error || "Login failed");
+      console.log("Firebase Login Error:", error.message);
+      Alert.alert("Login Failed", error.message);
     }
   };
 
@@ -55,13 +50,6 @@ export default function Login() {
         <Text style={styles.title}>Welcome Back!</Text>
         <Text style={styles.subtitle}>Please login to continue</Text>
 
-        {/* Test Credentials Box */}
-        <View style={styles.infoBox}>
-          <Text style={styles.infoText}>Test credentials:</Text>
-          <Text style={styles.code}>Email: eve.holt@reqres.in</Text>
-          <Text style={styles.code}>Password: pistol</Text>
-        </View>
-
         <Controller
           control={control}
           name="email"
@@ -72,7 +60,7 @@ export default function Login() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styles.input}
-              placeholder="eve.holt@reqres.in"
+              placeholder="Enter your email"
               keyboardType="email-address"
               onBlur={onBlur}
               onChangeText={onChange}
@@ -91,7 +79,7 @@ export default function Login() {
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               style={styles.input}
-              placeholder="pistol"
+              placeholder="Enter your password"
               secureTextEntry
               onBlur={onBlur}
               onChangeText={onChange}
@@ -166,23 +154,4 @@ const styles = StyleSheet.create({
   footerText: { textAlign: "center", color: "#666" },
   link: { color: "#4f46e5", fontWeight: "bold" },
   error: { color: "red", marginBottom: 10, fontSize: 13 },
-
-  // Info Box Styles
-  infoBox: {
-    backgroundColor: "#eef2ff",
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#c7d2fe",
-  },
-  infoText: { fontWeight: "600", color: "#1e3a8a", marginBottom: 4 },
-  code: {
-    fontFamily: "monospace",
-    backgroundColor: "#fff",
-    padding: 6,
-    borderRadius: 6,
-    marginBottom: 4,
-    color: "#1e3a8a",
-  },
 });
