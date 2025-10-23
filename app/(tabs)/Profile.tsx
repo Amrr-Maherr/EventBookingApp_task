@@ -1,25 +1,49 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { getAuth, signOut } from "firebase/auth";
+import { useRouter } from "expo-router";
 
 export default function Profile() {
+  const auth = getAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      Alert.alert("Logged out", "You have been signed out successfully.");
+      router.replace("/Login");
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: "https://randomuser.me/api/portraits/men/75.jpg" }}
+        source={{ uri: "https://randomuser.me/api/portraits/men.jpg" }}
         style={styles.avatar}
       />
       <Text style={styles.name}>Amr Maher</Text>
       <Text style={styles.role}>Front-End Developer</Text>
+
       <View style={styles.infoContainer}>
         <Text style={styles.infoTitle}>Email:</Text>
         <Text style={styles.infoText}>amrr.maherr24@gmail.com</Text>
       </View>
+
       <View style={styles.infoContainer}>
         <Text style={styles.infoTitle}>Location:</Text>
         <Text style={styles.infoText}>Cairo, Egypt</Text>
       </View>
-      <TouchableOpacity style={styles.editButton}>
-        <Text style={styles.editButtonText}>Edit Profile</Text>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutButtonText}>Logout</Text>
       </TouchableOpacity>
     </View>
   );
@@ -61,14 +85,14 @@ const styles = StyleSheet.create({
   infoText: {
     color: "#6B7280",
   },
-  editButton: {
-    marginTop: 30,
-    backgroundColor: "#4F46E5",
+  logoutButton: {
+    marginTop: 15,
+    backgroundColor: "#DC2626",
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,
   },
-  editButtonText: {
+  logoutButtonText: {
     color: "#FFFFFF",
     fontWeight: "600",
     fontSize: 16,
